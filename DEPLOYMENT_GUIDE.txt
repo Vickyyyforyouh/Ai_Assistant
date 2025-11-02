@@ -1,0 +1,183 @@
+╔═══════════════════════════════════════════════════════════════╗
+║       AI AGENT - MacBook Deployment Guide                     ║
+╚═══════════════════════════════════════════════════════════════╝
+
+📦 FILES TO TRANSFER TO YOUR MACBOOK:
+
+REQUIRED FILES (Must Transfer):
+├── app.py                    - Main Flask backend
+├── agent_engine.py           - Agent reasoning engine
+├── tools.py                  - All agent tools (9 tools)
+├── .env                      - API keys & configuration
+├── requirements.txt          - Python dependencies
+└── index.html                - Frontend chatbot UI
+
+OPTIONAL FILES (For testing):
+├── test_agent.py             - Test suite for agent
+└── test_chat.py              - Simple chat test
+
+NOT NEEDED (Can skip):
+├── test_requests/            - Old test files
+├── *.txt files               - Documentation files
+└── __pycache__/              - Python cache
+
+═══════════════════════════════════════════════════════════════
+
+🍎 SETUP ON MACBOOK:
+
+1. CREATE PROJECT FOLDER:
+   mkdir ai_assistant_backend
+   cd ai_assistant_backend
+
+2. TRANSFER FILES:
+   - Copy the 6 required files listed above
+   - Make sure .env has your OpenRouter API key
+
+3. INSTALL PYTHON (if needed):
+   - macOS usually has Python pre-installed
+   - Check: python3 --version
+   - Or download from: https://www.python.org/downloads/macos/
+
+4. CREATE VIRTUAL ENVIRONMENT (recommended):
+   python3 -m venv venv
+   source venv/bin/activate
+
+5. INSTALL DEPENDENCIES:
+   pip3 install -r requirements.txt
+
+6. VERIFY .ENV FILE:
+   - Make sure it has your OpenRouter API key:
+     OPENROUTER_API_KEY=sk-or-v1-your-key-here
+   - Check Flask settings:
+     FLASK_HOST=0.0.0.0
+     FLASK_PORT=5000
+     FLASK_DEBUG=True
+
+7. RUN THE SERVER:
+   python3 app.py
+
+8. OPEN CHATBOT UI:
+   - Open index.html in any browser
+   - Or navigate to: http://localhost:5000
+
+═══════════════════════════════════════════════════════════════
+
+⚙️ INTEGRATING WITH EXISTING FRONTEND:
+
+To connect this backend to your existing frontend on MacBook:
+
+OPTION 1: Use the API Endpoints
+   Your frontend needs to make requests to:
+   
+   POST http://localhost:5000/chat
+   Body: {"message": "user message"}
+   Response: {"reply": "AI response", "tool_calls": [...]}
+   
+   GET http://localhost:5000/tools
+   Response: {"status": "success", "tools": {...}}
+   
+   POST http://localhost:5000/execute-tool
+   Body: {"tool_name": "web_search", "parameters": {...}}
+   
+   POST http://localhost:5000/clear
+   Response: {"status": "conversation cleared"}
+
+OPTION 2: Modify Your Frontend
+   1. Change API_URL in your frontend code to:
+      const API_URL = 'http://localhost:5000';
+   
+   2. Add these fetch calls:
+      - For chat: POST to /chat with {"message": "..."}
+      - Include credentials: 'include' for session
+   
+   3. Handle responses:
+      {
+        "reply": "AI response",
+        "tool_calls": [...],  // If agent used tools
+        "iterations": 2       // Number of reasoning steps
+      }
+
+OPTION 3: Use Provided index.html as Template
+   - Copy relevant code from index.html
+   - Adapt the conversation management system
+   - Keep the API integration logic
+
+═══════════════════════════════════════════════════════════════
+
+🔧 MACOS-SPECIFIC NOTES:
+
+1. TERMINAL COMMANDS:
+   - Use Terminal.app or iTerm2
+   - Commands use 'python3' instead of 'python'
+   - Commands use 'pip3' instead of 'pip'
+
+2. FILE PATHS:
+   - Use forward slashes: /Users/username/project/
+   - Not backslashes like Windows
+
+3. OPENING FILES:
+   - Open HTML: open index.html
+   - Edit files: nano .env (or use VS Code, Sublime)
+
+4. PERMISSIONS:
+   - If permission denied: chmod +x app.py
+   - Or run with: python3 app.py
+
+5. NETWORK:
+   - Server runs on: http://127.0.0.1:5000
+   - Same as Windows, works identically
+
+═══════════════════════════════════════════════════════════════
+
+📋 QUICK START CHECKLIST:
+
+□ Transfer 6 required files to MacBook
+□ Install Python 3 (check: python3 --version)
+□ Create virtual environment (optional but recommended)
+□ Run: pip3 install -r requirements.txt
+□ Verify .env has OpenRouter API key
+□ Run: python3 app.py
+□ Test: Open index.html or connect your frontend
+□ Verify: http://localhost:5000 shows success
+
+═══════════════════════════════════════════════════════════════
+
+🎯 CONNECTING TO YOUR EXISTING FRONTEND:
+
+If you have a React/Vue/Angular/etc frontend:
+
+1. UPDATE API ENDPOINT:
+   const API_BASE_URL = 'http://localhost:5000';
+
+2. CHAT FUNCTION:
+   async function sendMessage(message) {
+     const response = await fetch(`${API_BASE_URL}/chat`, {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       credentials: 'include',
+       body: JSON.stringify({ message })
+     });
+     const data = await response.json();
+     return data.reply; // AI response
+   }
+
+3. ENABLE CORS (already done in backend):
+   - flask-cors is already configured
+   - Supports credentials and all origins
+   - No additional setup needed
+
+4. SESSION MANAGEMENT:
+   - Backend uses Flask sessions
+   - Include 'credentials: include' in fetch
+   - Maintains conversation context
+
+═══════════════════════════════════════════════════════════════
+
+🚀 READY TO DEPLOY!
+
+Transfer the 6 files, run pip3 install, and you're good to go!
+
+Questions? The backend is identical on macOS - same commands,
+same API, same features. Only difference is 'python3' vs 'python'.
+
+═══════════════════════════════════════════════════════════════
